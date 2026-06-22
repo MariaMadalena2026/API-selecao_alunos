@@ -2,7 +2,7 @@
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import repositoryResultado from "../repositories/repositoryResultado.js";
-import path from "path";
+
 function desenharCabecalho(
     doc,
     curso,
@@ -10,19 +10,9 @@ function desenharCabecalho(
     totalInscritos
 ){
 
-    import { fileURLToPath } from "url";
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
-    const caminhoLogo = path.join(
-        __dirname,
-        "../../assets/logo.png"
-    );
-
-    if (fs.existsSync(caminhoLogo)) {
+    if(fs.existsSync("./assets/logo.png")){
         doc.image(
-            caminhoLogo,
+            "./assets/logo.png",
             40,
             20,
             {

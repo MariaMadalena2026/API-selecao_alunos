@@ -2,6 +2,9 @@ import serviceResultado from "../services/serviceResultado.js";
 
 async function GerarPDF(req, res) {
     try {
+        const pdf =
+            await serviceResultado.GerarPDF();
+
         res.setHeader(
             "Content-Type",
             "application/pdf"
@@ -12,7 +15,7 @@ async function GerarPDF(req, res) {
             'attachment; filename="resultado-final.pdf"'
         );
 
-        await serviceResultado.GerarPDF(res);
+        res.send(pdf);
 
     } catch (erro) {
         console.error(erro);

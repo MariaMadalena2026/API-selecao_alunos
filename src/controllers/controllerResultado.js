@@ -1,19 +1,28 @@
 import serviceResultado from "../services/serviceResultado.js";
-import path from "path";
 
-async function GerarPDF(req, res){
+async function GerarPDF(req, res) {
+    try {
+        res.setHeader(
+            "Content-Type",
+            "application/pdf"
+        );
 
-    await serviceResultado.GerarPDF();
+        res.setHeader(
+            "Content-Disposition",
+            'attachment; filename="resultado-final.pdf"'
+        );
 
-    const arquivo = path.resolve(
-        "resultado-final.pdf"
-    );
+        await serviceResultado.GerarPDF(res);
 
-    res.download(
-        arquivo,
-        "resultado-final.pdf"
-    );
+    } catch (erro) {
+        console.error(erro);
 
+        res.status(500).json({
+            mensagem: "Erro ao gerar PDF"
+        });
+    }
 }
 
-export default { GerarPDF };
+export default {
+    GerarPDF
+};

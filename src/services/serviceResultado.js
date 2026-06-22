@@ -102,12 +102,9 @@ async function GerarPDF(){
                 margin:40
             });
 
-        const stream =
-            fs.createWriteStream(
-                "resultado-final.pdf"
-            );
+        const buffers = [];
 
-        doc.pipe(stream);
+        doc.on("data", buffers.push.bind(buffers));
 
         const cursos = [
             ...new Set(
@@ -460,23 +457,16 @@ doc
 
         });
 
+        doc.on("end", () => {
+        const pdf = Buffer.concat(buffers);
+        resolve(pdf);
+        });
+
+        doc.on("error", erro => {
+        reject(erro);
+        });
+
         doc.end();
-
-        stream.on(
-            "finish",
-            ()=>{
-                resolve();
-            }
-        );
-
-        stream.on(
-            "error",
-            erro=>{
-                reject(
-                    erro
-                );
-            }
-        );
 
     });
 
